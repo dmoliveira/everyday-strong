@@ -1,11 +1,12 @@
-import { DAYS, parseDate, phaseIndex, sessionKey, workouts } from './plan.js';
+import { DAYS, DEFAULT_DAYS, defaultDate, parseDate, phaseIndex, sessionKey, workouts } from './plan.js';
 
 export const STORAGE_KEY = 'everyday_strong_v2';
 export const LEGACY_KEY = 'homefit52_v1';
 export const MAX_BACKUP_SIZE = 5 * 1024 * 1024;
 
 export function emptyState() {
-  return { version: 2, week: 1, day: 'A', startDate: '', done: {}, exerciseLogs: {}, cardio: {}, scheduled: {}, legacyBackup: null };
+  return { version: 2, week: 1, day: 'A', startDate: '', done: {}, exerciseLogs: {}, cardio: {}, scheduled: {}, legacyBackup: null,
+    settings: { days: { ...DEFAULT_DAYS }, sets: 'plan', restSeconds: 90 } };
 }
 
 const object = value => value !== null && typeof value === 'object' && !Array.isArray(value);
@@ -52,6 +53,13 @@ export function validateState(value) {
   state.week = value.week;
   state.day = value.day;
   state.startDate = date(value.startDate, 'start date');
+  if (value.settings !== undefined) {
+    const settings = requireObject(value.settings, 'training settings');
+    const days = requireObject(settings.days, 'training days');
+    if (!DAYS.every(day => Number.isInteger(days[day]) && days[day] >= 0 && days[day] <= 6) ||
+        !['plan', '1', '2', '3'].includes(settings.sets) || ![45, 60, 90, 120, 180].includes(settings.restSeconds)) throw new Error('Invalid training settings.');
+    state.settings = { days: Object.fromEntries(DAYS.map(day => [day, days[day]])), sets: settings.sets, restSeconds: settings.restSeconds };
+  }
   for (const [key, completed] of entries(value.done, 'completion data', 1000)) {
     if (!validExerciseKey(key) || typeof completed !== 'boolean') throw new Error('Invalid exercise completion entry.');
     state.done[key] = completed;
@@ -59,9 +67,9 @@ export function validateState(value) {
   for (const [key, log] of entries(value.exerciseLogs, 'exercise logs', 1000)) {
     if (!validExerciseKey(key)) throw new Error('Invalid exercise log key.');
     requireObject(log, 'exercise log');
-    if (!Array.isArray(log.sets) || log.sets.length > 30 || typeof log.skipped !== 'boolean' || !['unknown', 'none', 'yes'].includes(log.discomfort)) throw new Error('Invalid exercise log.');
+    if (!Array.isArray(log.sets) || log.sets.length > 30 || typeof log.skipped !== 'boolean' || (log.substituted !== undefined && typeof log.substituted !== 'boolean') || !['unknown', 'none', 'yes'].includes(log.discomfort)) throw new Error('Invalid exercise log.');
     state.exerciseLogs[key] = {
-      variation: text(log.variation, 'variation', 200), discomfort: log.discomfort, skipped: log.skipped,
+      variation: text(log.variation, 'variation', 200), discomfort: log.discomfort, skipped: log.skipped, substituted: log.substituted ?? false,
       notes: text(log.notes, 'exercise notes'),
       sets: log.sets.map(set => {
         requireObject(set, 'set');
@@ -87,6 +95,24 @@ export function validateState(value) {
   }
   state.legacyBackup = cleanLegacy(value.legacyBackup);
   return state;
+}
+
+// Preserve the date (or lack of one) attached to any previously recorded session.
+export function setPreferredDay(state, day, weekday) {
+  if (!DAYS.includes(day) || !Number.isInteger(weekday) || weekday < 0 || weekday > 6) throw new RangeError('Invalid training day.');
+  if (state.settings.days[day] === weekday) return 0;
+  let frozen = 0;
+  for (let week = 1; week <= 52; week++) {
+    const key = `${week}:${day}`;
+    const prefix = `${key}:`;
+    const recorded = Object.entries(state.done).some(([id, done]) => id.startsWith(prefix) && done) || Object.keys(state.exerciseLogs).some(id => id.startsWith(prefix));
+    if (recorded && !Object.hasOwn(state.scheduled, key)) {
+      state.scheduled[key] = defaultDate(state.startDate, week, day, state.settings.days);
+      frozen++;
+    }
+  }
+  state.settings.days[day] = weekday;
+  return frozen;
 }
 
 export function migrateLegacy(legacy) {

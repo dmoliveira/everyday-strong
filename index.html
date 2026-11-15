@@ -65,13 +65,21 @@
             <div class="week-controls"><label>Programme week<select id="week-select"></select></label><button class="button outline small-button" id="current-week" type="button">Go to current week</button><details class="start-date"><summary>Set a start date</summary><label>Any date in your first week<input id="start-date" type="date"></label><small>Weeks begin on Monday. Your date stays on this device.</small></details></div>
           </div>
           <p class="warning-box" id="storage-notice" role="status" hidden></p>
+          <details class="training-setup" id="training-setup">
+            <summary><span><span class="micro-label">MAKE IT FIT YOUR LIFE</span><strong>Personalise your plan</strong><small id="setup-summary">Your days · your pace</small></span><span class="setup-arrow" aria-hidden="true">↗</span></summary>
+            <div class="setup-content"><p>Choose your usual strength days and a set goal. These are flexible preferences—not a medical recommendation. Your logged sessions keep their existing dates.</p>
+              <div class="setup-fields"><label>Workout A<select id="preferred-A"></select></label><label>Workout B<select id="preferred-B"></select></label><label>Workout C<select id="preferred-C"></select></label><label>Sets per movement<select id="sets-goal"><option value="plan">Follow the plan</option><option value="1">1 set</option><option value="2">2 sets</option><option value="3">3 sets</option></select></label></div>
+              <p class="setup-note">Weeks 1–2 and easy/review weeks stay at no more than 2 sets. Changing a goal never changes the sets you have logged. Leave a recovery day between challenging strength sessions. If cardio falls on a strength day, keep it easy and separate it when practical.</p>
+            </div>
+          </details>
           <div id="week-overview"></div>
           <div class="schedule-heading"><div><span class="micro-label">A GENTLE RHYTHM</span><h3>Your week at a glance</h3></div><p>Tap a strength day below to explore it.</p></div>
           <div class="schedule" id="schedule"></div>
-          <p class="schedule-hint">Need to move a session? Set a date inside its card. Leave recovery time between challenging strength days.</p>
+          <p class="schedule-hint">Cards stay under your usual days; the displayed date is the date you have chosen for this session. Open a workout to move it. Leave recovery time between challenging strength days.</p>
           <div id="spacing-warning" role="status"></div>
-          <div class="workout-header" id="workout"><div><span class="micro-label">STRENGTH + CORE</span><h3>Meet your workouts</h3><p>Warm up with 5 minutes of easy movement. Rest 60–120 seconds between challenging sets.</p></div><div id="day-tabs" class="day-tabs" role="group" aria-label="Choose a strength workout"></div></div>
+          <div class="workout-header" id="workout" tabindex="-1"><div><span class="micro-label">STRENGTH + CORE</span><h3>Meet your workouts</h3><p>Warm up with 5 minutes of easy movement. Rest 60–120 seconds between challenging sets.</p></div><div id="day-tabs" class="day-tabs" role="group" aria-label="Choose a strength workout"></div></div>
           <div id="session-summary"></div>
+          <div class="rest-timer" aria-label="Optional rest timer" role="group"><div><span class="micro-label">TAKE A BREATH</span><strong>Rest between sets</strong><small>Visual timer · no alerts · resets on reload</small></div><div class="timer-controls"><label>Rest time<select id="rest-duration"><option value="45">45 seconds</option><option value="60">60 seconds</option><option value="90">90 seconds</option><option value="120">2 minutes</option><option value="180">3 minutes</option></select></label><output id="timer-display" role="timer" aria-label="Rest time remaining">1:30</output><button class="button primary small-button" id="timer-toggle" type="button">Start rest</button><button class="button outline small-button" id="timer-reset" type="button">Reset</button></div></div>
           <div class="exercise-list" id="exercise-list"></div>
           <p class="after-workout">✳ Finish with 5–10 minutes of comfortable mobility. The movements below are a good place to start.</p>
         </div>
@@ -90,6 +98,7 @@
   </main>
 
   <footer class="site-footer"><div class="shell footer-grid"><div><a class="brand light-brand" href="#top"><span class="brand-mark" aria-hidden="true">✳</span><span>everyday<strong>strong</strong><small>HOME FITNESS, MADE HUMAN</small></span></a><p>A kinder way to get stronger at home.<br>One day, one movement, one week at a time.</p></div><div><strong>EXPLORE</strong><a href="#plan">Your plan</a><a href="#guide">Mobility guide</a><a href="#safety">Safety first</a><a href="https://github.com/dmoliveira/everyday-strong">GitHub repository ↗</a></div><div><strong>GOOD TO KNOW</strong><p>Free to use. No account or tracking analytics. Progress is stored locally in your browser.</p><a href="https://www.health.gov.au/topics/physical-activity/24-hour-movement-guidelines-for-all-australians/recommendations-for-adults-18-to-64-years" target="_blank" rel="noopener noreferrer">Australian activity guidelines ↗</a><a href="https://pubmed.ncbi.nlm.nih.gov/41843416/" target="_blank" rel="noopener noreferrer">ACSM resistance-training guidance ↗</a></div></div><div class="shell footer-bottom"><span>MADE FOR REAL LIFE, AND ALL ITS MESSY MIDDLES. ✳</span><a href="#top">BACK TO TOP ↑</a></div></footer>
+  <nav class="mobile-nav" aria-label="Quick navigation"><a href="#top"><span aria-hidden="true">⌂</span>Home</a><a href="#plan"><span aria-hidden="true">▦</span>My week</a><a href="#workout"><span aria-hidden="true">✳</span>Workout</a><a href="#progress"><span aria-hidden="true">↗</span>Progress</a></nav>
   <div id="announcement" class="sr-only" aria-live="polite"></div>
 </body>
 </html>

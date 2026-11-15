@@ -1,8 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
-import { DAYS, cardioForWeek, defaultDate, doseTarget, exerciseGuide, isEasyWeek, mobility, phaseIndex, progressionSuggestion, sessionKey, setsForWeek, spacingWarning, weekForDate, workouts } from '../src/plan.js';
-import { LEGACY_KEY, STORAGE_KEY, emptyState, loadState, makeBackup, migrateLegacy, readBackup, saveState } from '../src/state.js';
+import { DAYS, cardioForWeek, dateLabel, defaultDate, doseTarget, exerciseGuide, isEasyWeek, mobility, phaseIndex, progressionSuggestion, sessionKey, setsForWeek, spacingWarning, targetSetsForWeek, weekForDate, weeklySpacingWarning, workouts } from '../src/plan.js';
+import { LEGACY_KEY, STORAGE_KEY, emptyState, loadState, makeBackup, migrateLegacy, readBackup, saveState, setPreferredDay } from '../src/state.js';
 
 test('all 72 source slots have stable IDs, bilingual names, cues, and safe alternatives', () => {
   assert.equal(workouts.length, 4);
@@ -23,6 +23,7 @@ test('all 72 source slots have stable IDs, bilingual names, cues, and safe alter
       sessionIds.add(exercise.id);
       const guide = exerciseGuide(exercise);
       assert.ok(guide.equipment && guide.easy && guide.harder);
+      assert.ok(guide.variations.length > 0, `missing variation examples for ${exercise.en}`);
     }
   }
   assert.equal(slots, 72);
@@ -38,12 +39,21 @@ test('phase, introductory, cardio, and easy-week boundaries are correct', () => 
   for (let week = 1; week <= 52; week++) assert.equal(isEasyWeek(week), week % 4 === 0 || [13, 26, 39, 52].includes(week));
   assert.deepEqual(cardioForWeek(1), { bike: '15–20', treadmill: '15–25' });
   assert.deepEqual(cardioForWeek(52), { bike: '30–40', treadmill: '25–45' });
+  assert.equal(targetSetsForWeek(1, '3'), '2');
+  assert.equal(targetSetsForWeek(2, '3'), '2');
+  assert.equal(targetSetsForWeek(3, '3'), '3');
+  assert.equal(targetSetsForWeek(4, '3'), '2');
+  assert.equal(targetSetsForWeek(13, '1'), '1');
+  assert.equal(targetSetsForWeek(14, 'plan'), '2–3');
+  assert.throws(() => targetSetsForWeek(3, '99'), RangeError);
 });
 
 test('local calendar uses Mondays and handles daylight-saving boundaries', () => {
   assert.equal(defaultDate('2025-10-05', 1, 'A'), '2025-09-30');
   assert.equal(defaultDate('2025-10-05', 2, 'A'), '2025-10-07');
   assert.equal(defaultDate('2025-10-05', 1, 'treadmill'), '2025-10-03');
+  assert.equal(defaultDate('2025-10-05', 1, 'A', { A: 2, B: 3, C: 5 }), '2025-10-01');
+  assert.match(dateLabel('2026-01-06'), /^Tue/);
   assert.equal(defaultDate('', 1, 'A'), '');
   assert.equal(weekForDate('2025-10-05', new Date(2025, 9, 6, 12)), 2);
   assert.equal(weekForDate('2025-10-05', new Date(2025, 8, 1, 12)), 1);
@@ -52,6 +62,28 @@ test('local calendar uses Mondays and handles daylight-saving boundaries', () =>
   assert.ok(spacingWarning(['2026-03-02'], ['2026-03-01']));
   assert.equal(spacingWarning(['2026-03-02'], ['2026-03-04', '2026-03-05']), false);
   assert.equal(spacingWarning(['2026-02-30']), false);
+  assert.equal(weeklySpacingWarning({ A: 1, B: 3, C: 5 }), false);
+  assert.ok(weeklySpacingWarning({ A: 0, B: 3, C: 6 }), 'Sunday and Monday are adjacent across weeks');
+  assert.ok(weeklySpacingWarning({ A: 1, B: 1, C: 5 }), 'same-day sessions should be flagged');
+});
+
+test('changing usual days preserves recorded dates while moving unrecorded sessions', () => {
+  const state = emptyState();
+  state.startDate = '2026-01-05';
+  state.done[sessionKey(1, 'A', workouts[0].A[0].id)] = true;
+  state.exerciseLogs[sessionKey(2, 'A', workouts[0].A[1].id)] = { variation: 'wall', discomfort: 'unknown', skipped: false, substituted: true, notes: '', sets: [] };
+  state.scheduled['3:A'] = '2026-01-25';
+  assert.equal(setPreferredDay(state, 'A', 2), 2);
+  assert.equal(state.scheduled['1:A'], '2026-01-06');
+  assert.equal(state.scheduled['2:A'], '2026-01-13');
+  assert.equal(state.scheduled['3:A'], '2026-01-25');
+  assert.equal(defaultDate(state.startDate, 4, 'A', state.settings.days), '2026-01-28');
+  assert.deepEqual(readBackup(JSON.stringify(makeBackup(state))), state);
+  const withoutDate = emptyState();
+  withoutDate.done[sessionKey(1, 'A', workouts[0].A[0].id)] = true;
+  setPreferredDay(withoutDate, 'A', 2);
+  assert.equal(withoutDate.scheduled['1:A'], '', 'an unknown recorded date must remain unknown');
+  assert.throws(() => setPreferredDay(state, 'A', 7), RangeError);
 });
 
 test('legacy ticks use the frozen source template and preserve raw weekly check-ins', () => {
@@ -71,7 +103,7 @@ test('backup round-trips complete data, rejects invalid files, and storage failu
   const state = emptyState();
   const key = sessionKey(1, 'A', workouts[0].A[0].id);
   state.done[key] = true;
-  state.exerciseLogs[key] = { variation: 'chair', discomfort: 'none', skipped: false, notes: 'steady', sets: [{ value: '12', unit: 'reps', weight: '2', band: 'green', rir: '3' }] };
+  state.exerciseLogs[key] = { variation: 'chair', discomfort: 'none', skipped: false, substituted: true, notes: 'steady', sets: [{ value: '12', unit: 'reps', weight: '2', band: 'green', rir: '3' }] };
   state.cardio['1:bike'] = { done: true, date: '2026-01-05', minutes: '20', rpe: '3', speed: '', incline: '', resistance: '2', cadence: '60', notes: 'easy' };
   state.scheduled['1:A'] = '2026-01-07';
   state.legacyBackup = { done: {}, logs: { 1: { notes: 'old' } }, startDate: '' };
@@ -91,6 +123,21 @@ test('backup round-trips complete data, rejects invalid files, and storage failu
   assert.equal(loadState(legacyStorage).migrated, true);
 });
 
+test('old v2 data gains defaults without losing existing logs or ticks', () => {
+  const old = emptyState();
+  delete old.settings;
+  const key = sessionKey(1, 'A', workouts[0].A[0].id);
+  old.done[key] = true;
+  old.exerciseLogs[key] = { variation: 'chair', discomfort: 'none', skipped: false, notes: 'old log', sets: [] };
+  const restored = readBackup(JSON.stringify({ format: 'everyday-strong-backup', version: 2, data: old }));
+  assert.deepEqual(restored.settings, emptyState().settings);
+  assert.equal(restored.exerciseLogs[key].substituted, false);
+  assert.equal(restored.exerciseLogs[key].notes, 'old log');
+  assert.equal(restored.done[key], true);
+  const invalid = { ...restored, settings: { ...restored.settings, days: { A: 7, B: 3, C: 5 } } };
+  assert.throws(() => readBackup(JSON.stringify({ format: 'everyday-strong-backup', version: 2, data: invalid })), /settings/i);
+});
+
 test('progression requires two comparable non-easy, comfortable, fully logged occurrences', () => {
   const state = emptyState(), exercise = workouts[0].A[0];
   const log = () => ({ variation: 'chair', discomfort: 'none', skipped: false, notes: '', sets: [{ value: '12', unit: 'reps', weight: '', band: '', rir: '3' }] });
@@ -103,6 +150,8 @@ test('progression requires two comparable non-easy, comfortable, fully logged oc
   second.variation = ''; assert.equal(progressionSuggestion(state, exercise, 'A', 3), null);
   second.variation = 'chair'; second.sets[0].rir = '1'; assert.equal(progressionSuggestion(state, exercise, 'A', 3), null);
   second.sets[0].rir = '99'; assert.equal(progressionSuggestion(state, exercise, 'A', 3), null);
-  second.sets[0].rir = '3'; second.skipped = true; assert.equal(progressionSuggestion(state, exercise, 'A', 3), null);
+  second.sets[0].rir = '3'; second.substituted = true; assert.equal(progressionSuggestion(state, exercise, 'A', 3), null);
+  second.substituted = false; state.settings.sets = '3'; assert.equal(progressionSuggestion(state, exercise, 'A', 3), null, 'the current set goal must also be met');
+  state.settings.sets = 'plan'; second.skipped = true; assert.equal(progressionSuggestion(state, exercise, 'A', 3), null);
   assert.equal(doseTarget('20–40 sec or 6–10 taps / side'), null);
 });
