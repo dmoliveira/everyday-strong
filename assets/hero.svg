@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 780" role="img" aria-labelledby="title desc">
+  <title id="title">A little room to move</title>
+  <desc id="desc">A person enjoys a gentle stretch in a sunny home workout space.</desc>
+  <defs>
+    <clipPath id="frame"><rect width="800" height="780" rx="24"/></clipPath>
+    <pattern id="dots" width="23" height="23" patternUnits="userSpaceOnUse"><circle cx="3" cy="3" r="1.4" fill="#a6bda9"/></pattern>
+  </defs>
+  <g clip-path="url(#frame)">
+    <rect width="800" height="780" fill="#d5e4d4"/>
+    <circle cx="588" cy="227" r="177" fill="#f4c86d"/>
+    <path d="M0 567c113-27 212-21 322-2s279 16 478-13v228H0z" fill="#b7cdb5"/>
+    <path d="M0 621c205-32 415-6 800-29v188H0z" fill="#a6c2a6"/>
+    <path d="M22 57h139v125H22z" fill="url(#dots)" opacity=".7"/>
+    <path d="M647 52v163m-82-81h164" stroke="#f9edcc" stroke-width="4" opacity=".55"/>
+    <path d="M91 493c-3-86-19-145-42-190m44 190c2-89 22-152 42-194" fill="none" stroke="#315d4e" stroke-width="8" stroke-linecap="round"/>
+    <path d="M73 427c-49-9-64-42-56-65 33-2 60 13 66 50M111 398c43-11 55-38 51-62-30 0-53 18-60 52M66 356c-39-19-44-47-32-67 27 4 47 26 46 58M123 340c33-24 37-50 24-67-24 9-39 31-37 58" fill="#477c61"/>
+    <path d="M55 474h79l-12 90H67z" fill="#c56649"/><path d="M55 474h79v13H55z" fill="#a9533c"/>
+    <ellipse cx="428" cy="648" rx="294" ry="36" fill="#819f8c" opacity=".35"/>
+    <path d="M150 621c57-18 372-25 503-13 15 2 16 18 2 22-123 28-435 34-507 13-12-4-11-17 2-22z" fill="#e99b7d"/><path d="M169 635c101 13 346 8 470-8" fill="none" stroke="#c9745c" stroke-width="4" opacity=".6"/>
+    <!-- The figure is an editorial illustration, not an exercise demonstration. -->
+    <path d="M403 422c-42 31-95 89-154 134-17 13-39 30-53 39-18 12-5 37 14 32 44-13 88-38 119-55l119-66z" fill="#234f45"/>
+    <path d="M410 442c-19 35-23 75-14 118 5 24 13 44 24 58 8 11 27 8 31-4 4-11-1-23-1-33 2-24 16-58 32-82l17-43z" fill="#2f6656"/>
+    <path d="M197 607c-17 2-35 7-45 15-8 6-3 17 8 17h53c12-1 21-9 20-18l-4-16zM426 608c-3 12-4 23 3 27 10 6 40 6 57 2 12-3 14-13 5-18-10-5-25-9-34-18z" fill="#f8f1df"/>
+    <path d="M434 299c31 0 58 21 67 51 7 25 4 65-2 100-30 21-67 24-99 5 7-37 8-75 1-101-6-25 7-49 33-55z" fill="#e58e69"/>
+    <path d="M437 306c12 18 28 22 43 15 13 8 20 21 24 38-27 11-61 9-95-3 1-23 9-39 28-50z" fill="#f3a784"/>
+    <path d="M409 335c-19 3-31 20-43 39l-44 67c-6 10-19 15-42 22l-58 15c-9 3-12 11-8 18 3 7 11 9 19 8l75-14c25-5 41-11 55-26l62-65z" fill="#b77459"/>
+    <path d="M480 339c17-5 30 2 44 18l55 63c10 12 22 18 38 22l45 10c8 2 13 9 11 17-2 7-9 11-17 10l-59-8c-23-3-41-11-57-24l-67-52z" fill="#bd7d5e"/>
+    <path d="M436 303l1-41 38-2 3 44c-11 15-30 14-42-1z" fill="#b77459"/>
+    <ellipse cx="455" cy="231" rx="43" ry="51" fill="#c98d6c"/>
+    <path d="M414 233c-4-33 9-58 37-60 26-2 44 16 47 45-11-1-19-7-24-15-10 14-31 21-57 18z" fill="#304b3e"/>
+    <path d="M425 193c-9-12-7-32 8-40 13-7 25-1 29 6 12-8 27-3 31 11 3 10-3 21-9 26z" fill="#304b3e"/>
+    <path d="M454 245c5 5 12 5 17 0" fill="none" stroke="#724a3e" stroke-width="2.5" stroke-linecap="round"/>
+    <circle cx="440" cy="228" r="2.5" fill="#304b3e"/><circle cx="472" cy="228" r="2.5" fill="#304b3e"/>
+    <g transform="translate(606 539) rotate(-9)"><rect x="6" y="18" width="88" height="19" rx="9" fill="#355d50"/><rect y="5" width="19" height="45" rx="7" fill="#355d50"/><rect x="81" y="5" width="19" height="45" rx="7" fill="#355d50"/><path d="M42 25h17" stroke="#7a9b85" stroke-width="4" stroke-linecap="round"/></g>
+    <g fill="none" stroke="#f9f0d7" stroke-width="5" stroke-linecap="round"><path d="M195 176v34m-17-17h34M694 355v38m-19-19h38"/><path d="M244 270l5 12 12 5-12 5-5 12-5-12-12-5 12-5z" fill="#f9f0d7" stroke="none"/></g>
+    <text x="39" y="745" fill="#315d4e" font-family="Arial, sans-serif" font-size="13" font-weight="bold" letter-spacing="3">A LITTLE SPACE FOR YOURSELF</text>
+    <text x="739" y="745" fill="#315d4e" font-family="Arial, sans-serif" font-size="25" text-anchor="end">✳</text>
+  </g>
+</svg>
