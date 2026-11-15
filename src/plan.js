@@ -2,6 +2,8 @@ import { planData } from './plan-data.js';
 
 export const { phases, workouts, mobility } = planData;
 export const DAYS = ['A', 'B', 'C'];
+export const WEEKDAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+export const DEFAULT_DAYS = Object.freeze({ A: 1, B: 3, C: 5 });
 
 export function phaseIndex(week) {
   if (!Number.isInteger(week) || week < 1 || week > 52) throw new RangeError('Week must be between 1 and 52');
@@ -15,6 +17,12 @@ export function isEasyWeek(week) {
 
 export function setsForWeek(week) {
   return isEasyWeek(week) || week <= 2 ? '1–2' : week <= 13 ? '2' : '2–3';
+}
+
+export function targetSetsForWeek(week, preference = 'plan') {
+  if (preference === 'plan') return setsForWeek(week);
+  if (!['1', '2', '3'].includes(preference)) throw new RangeError('Invalid set goal');
+  return String(isEasyWeek(week) || week <= 2 ? Math.min(Number(preference), 2) : Number(preference));
 }
 
 export function cardioForWeek(week) {
@@ -47,9 +55,9 @@ export function weekForDate(startDate, today = new Date()) {
   return Math.max(1, Math.min(52, Math.floor((todayCalendar - mondayOf(start)) / 604800000) + 1));
 }
 
-export function defaultDate(startDate, week, day) {
+export function defaultDate(startDate, week, day, strengthDays = DEFAULT_DAYS) {
   const start = parseDate(startDate);
-  const dayOffset = { bike: 0, A: 1, B: 3, treadmill: 4, C: 5 }[day];
+  const dayOffset = DAYS.includes(day) ? strengthDays[day] : { bike: 0, treadmill: 4 }[day];
   if (!start || dayOffset === undefined) return '';
   const date = mondayOf(start);
   date.setUTCDate(date.getUTCDate() + (week - 1) * 7 + dayOffset);
@@ -59,7 +67,7 @@ export function defaultDate(startDate, week, day) {
 
 export function dateLabel(value) {
   const date = parseDate(value);
-  return date ? new Intl.DateTimeFormat('en-AU', { day: 'numeric', month: 'short', timeZone: 'UTC' }).format(date) : '';
+  return date ? new Intl.DateTimeFormat('en-AU', { weekday: 'short', day: 'numeric', month: 'short', timeZone: 'UTC' }).format(date) : '';
 }
 
 export function spacingWarning(dates, otherDates = []) {
@@ -68,6 +76,14 @@ export function spacingWarning(dates, otherDates = []) {
   return current.some((date, index) =>
     current.slice(index + 1).some(other => Math.abs(date - other) < 2 * 86400000) ||
     others.some(other => Math.abs(date - other) < 2 * 86400000));
+}
+
+export function weeklySpacingWarning(days) {
+  const values = DAYS.map(day => days[day]);
+  return values.some((value, index) => values.slice(index + 1).some(other => {
+    const distance = Math.abs(value - other);
+    return Math.min(distance, 7 - distance) < 2;
+  }));
 }
 
 // Explicit movement-family guidance is a choice aid, not a diagnosis or a prescription.
@@ -98,6 +114,25 @@ const alternatives = {
   triceps: ['Use a lighter band and comfortable shoulder position.', 'Try slightly more tension while keeping the band secure.'],
 };
 
+// These are optional log-entry examples, not a personalised replacement prescription.
+const variationExamples = {
+  squat: ['Chair squat', 'Bodyweight squat', 'Supported split squat'],
+  lunge: ['Supported split squat', 'Shallow chair squat', 'Low supported step-up'],
+  push: ['Wall push-up', 'Higher incline push-up', 'Lower incline push-up'],
+  row: ['Lighter-band seated row', 'Stronger-band seated row'],
+  bridge: ['Two-foot glute bridge', 'Heel-dig bridge', 'Assisted single-leg bridge'],
+  press: ['Unweighted shoulder press', 'Light neutral-grip press'],
+  pullapart: ['Lighter-band pull-apart', 'Small-range pull-apart'],
+  calf: ['Two-leg supported calf raise', 'Single-leg supported calf raise'],
+  plank: ['Knee-supported front plank', 'Knee-supported side plank'],
+  crunch: ['Small-range crunch', 'Small-range reverse crunch'],
+  deadbug: ['Short-range dead bug', 'One limb at a time'],
+  birddog: ['Reach one arm or leg at a time', 'Short-range bird dog'],
+  sideleg: ['Clamshell', 'Side-lying hip abduction'],
+  curl: ['Lighter-band biceps curl', 'Seated band curl'],
+  triceps: ['Lighter-band triceps extension'],
+};
+
 export function movementFamily(name) {
   const n = name.toLowerCase();
   if (/walkout|bridge/.test(n)) return 'bridge';
@@ -123,7 +158,7 @@ export function exerciseGuide(exercise) {
   const guide = guides[family] || ['Bodyweight and a stable support if needed', 'Use a comfortable supported range.', 'Progress gradually only while the movement remains controlled.'];
   const [equipment, easy, harder] = guide;
   const fallback = alternatives[family] || [];
-  return { family, equipment, easy: easy || fallback[0], harder: harder || fallback[1] };
+  return { family, equipment, easy: easy || fallback[0], harder: harder || fallback[1], variations: variationExamples[family] || [] };
 }
 
 export function sessionKey(week, day, id) { return `${week}:${day}:${id}`; }
@@ -144,8 +179,8 @@ export function progressionSuggestion(state, exercise, day, currentWeek) {
     if (!prescribed) continue;
     const key = sessionKey(week, day, exercise.id);
     const log = state.exerciseLogs[key];
-    const minimumSets = Number(setsForWeek(week).split('–')[0]);
-    if (!state.done[key] || !log || log.skipped || !log.variation.trim() || log.discomfort !== 'none' || log.sets.length < minimumSets) continue;
+    const minimumSets = Math.max(Number(setsForWeek(week).split('–')[0]), Number(targetSetsForWeek(week, state.settings?.sets || 'plan').split('–')[0]));
+    if (!state.done[key] || !log || log.skipped || log.substituted || !log.variation.trim() || log.discomfort !== 'none' || log.sets.length < minimumSets) continue;
     if (!log.sets.every(set => set.unit === target.unit && set.value !== '' && Number.isFinite(Number(set.value)) && Number(set.value) >= target.upper && set.rir !== '' && Number.isFinite(Number(set.rir)) && Number(set.rir) >= 2 && Number(set.rir) <= 10)) continue;
     const signature = JSON.stringify([log.variation.trim().toLowerCase(), log.sets.map(set => [set.weight.trim(), set.band.trim().toLowerCase()])]);
     const earlier = matches.find(item => item.signature === signature);
