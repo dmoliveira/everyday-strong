@@ -1,0 +1,18 @@
+{
+  "name": "everyday-strong",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "A free, local-first 52-week home fitness plan.",
+  "scripts": {
+    "test": "node --test tests/plan.test.js",
+    "test:browser": "node --test tests/browser.test.js"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.14.0",
+    "playwright": "^1.65.1"
+  }
+}

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f6f4eb">
+  <title>Everyday Strong | Free 52-Week Home Workout Plan</title>
+  <meta name="description" content="Build a sustainable strength, cardio and mobility routine at home. Explore a free 52-week workout plan and track your progress privately in your browser.">
+  <link rel="canonical" href="https://dmoliveira.github.io/everyday-strong/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Everyday Strong">
+  <meta property="og:locale" content="en_AU">
+  <meta property="og:title" content="Everyday Strong | A little stronger, every week">
+  <meta property="og:description" content="A free 52-week home workout plan for strength, cardio and mobility. No account needed.">
+  <meta property="og:url" content="https://dmoliveira.github.io/everyday-strong/">
+  <meta property="og:image" content="https://dmoliveira.github.io/everyday-strong/assets/social.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Everyday Strong: a little stronger, every week">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/style.css">
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"WebApplication","name":"Everyday Strong","url":"https://dmoliveira.github.io/everyday-strong/","description":"A free 52-week home strength, cardio and mobility plan with a private browser-based progress tracker.","applicationCategory":"HealthApplication","operatingSystem":"Any modern web browser","inLanguage":"en-AU","offers":{"@type":"Offer","price":"0","priceCurrency":"AUD"}}
+  </script>
+  <script type="module" src="src/app.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="shell nav">
+      <a class="brand" href="#top"><span class="brand-mark" aria-hidden="true">✳</span><span>everyday<strong>strong</strong><small>HOME FITNESS, MADE HUMAN</small></span></a>
+      <nav aria-label="Main navigation"><a href="#plan">The plan</a><a href="#guide">The essentials</a><a href="#progress">My progress</a></nav>
+      <a class="nav-cta" href="#plan">Let's move <span aria-hidden="true">↗</span></a>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero shell" id="top">
+      <div class="hero-copy">
+        <div class="eyebrow"><span class="sparkle">✳</span> A LITTLE MOVEMENT GOES A LONG WAY</div>
+        <h1>Make room<br>for <em>strong.</em></h1>
+        <p class="hero-lead">A little stronger, a little more confident, one week at a time. A free, flexible home fitness plan for real life.</p>
+        <div class="hero-actions"><a class="button primary" href="#plan">Explore your first week <span aria-hidden="true">↗</span></a><a class="text-link" href="#how-it-works">How it works <span aria-hidden="true">↓</span></a></div>
+        <div class="hero-proof"><span class="proof-icon" aria-hidden="true">♥</span><span>Made for your pace.<br><strong>No gym. No pressure. No account.</strong></span></div>
+      </div>
+      <div class="hero-visual"><img src="assets/hero.svg" alt="Illustration of a welcoming home workout space with a person stretching, a plant and exercise equipment" fetchpriority="high"><div class="hero-sticker"><span>52</span> WEEKS OF<br>SHOWING UP <b>↗</b></div><div class="hero-note">A STRONGER YOU,<br><strong>RIGHT AT HOME.</strong> <span>✳</span></div></div>
+    </section>
+
+    <div class="ticker"><div class="shell"><span>STRENGTH</span><b>✳</b><span>CARDIO</span><b>✳</b><span>MOBILITY</span><b>✳</b><span>MORE YOU TIME</span><b>✳</b><span>REPEAT AT YOUR PACE</span></div></div>
+
+    <section class="intro-section shell section" id="how-it-works">
+      <div class="section-heading"><div><div class="eyebrow">THE BIG PICTURE <span>✳</span></div><h2>Small steps.<br><em>Real-life strength.</em></h2></div><p>Forget all-or-nothing. This plan brings strength, gentle cardio and mobility together in a routine you can make your own.</p></div>
+      <div class="benefit-grid"><article><span class="benefit-number">01 / THE RHYTHM</span><div class="benefit-icon">↗</div><h3>Three strength days</h3><p>Simple full-body sessions, with rest between them. Begin with a level that feels manageable.</p></article><article><span class="benefit-number">02 / THE MIX</span><div class="benefit-icon">☼</div><h3>Move in more ways</h3><p>Add conversational-pace cycling, walking and gentle mobility around your strength work.</p></article><article><span class="benefit-number">03 / THE LONG GAME</span><div class="benefit-icon">♡</div><h3>Progress, your way</h3><p>Follow four thoughtful phases over 52 weeks. Repeat, adapt or take a rest whenever you need.</p></article></div>
+    </section>
+
+    <section class="plan-section section" id="plan">
+      <div class="shell">
+        <div class="section-heading"><div><div class="eyebrow">YOUR PLAN, YOUR PACE <span>✳</span></div><h2>Let's make it<br><em>happen.</em></h2></div><p>Pick a week, explore the sessions and tick off movements as you go. There is no perfect week to keep up with.</p></div>
+        <div class="safety-strip"><span aria-hidden="true">✳</span><p><strong>First, a little care.</strong> This is general fitness information, not a medical assessment. If you have health concerns or have been inactive for a long time, check with a GP or accredited exercise professional before starting. <a href="#safety">Read the safety notes ↗</a></p></div>
+        <noscript><p class="safety-strip">Please enable JavaScript to explore the weekly plan and save your progress in this browser.</p></noscript>
+        <div class="app-shell" id="app" aria-busy="true">
+          <div class="plan-toolbar">
+            <div><span class="micro-label">YOUR TRAINING PLAN</span><h3>Make this week yours <span aria-hidden="true">✳</span></h3><p>Choose any week. You can change this whenever you like.</p></div>
+            <div class="week-controls"><label>Programme week<select id="week-select"></select></label><button class="button outline small-button" id="current-week" type="button">Go to current week</button><details class="start-date"><summary>Set a start date</summary><label>Any date in your first week<input id="start-date" type="date"></label><small>Weeks begin on Monday. Your date stays on this device.</small></details></div>
+          </div>
+          <p class="warning-box" id="storage-notice" role="status" hidden></p>
+          <div id="week-overview"></div>
+          <div class="schedule-heading"><div><span class="micro-label">A GENTLE RHYTHM</span><h3>Your week at a glance</h3></div><p>Tap a strength day below to explore it.</p></div>
+          <div class="schedule" id="schedule"></div>
+          <p class="schedule-hint">Need to move a session? Set a date inside its card. Leave recovery time between challenging strength days.</p>
+          <div id="spacing-warning" role="status"></div>
+          <div class="workout-header" id="workout"><div><span class="micro-label">STRENGTH + CORE</span><h3>Meet your workouts</h3><p>Warm up with 5 minutes of easy movement. Rest 60–120 seconds between challenging sets.</p></div><div id="day-tabs" class="day-tabs" role="group" aria-label="Choose a strength workout"></div></div>
+          <div id="session-summary"></div>
+          <div class="exercise-list" id="exercise-list"></div>
+          <p class="after-workout">✳ Finish with 5–10 minutes of comfortable mobility. The movements below are a good place to start.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section shell" id="cardio"><div class="section-heading compact"><div><div class="eyebrow">A LITTLE GETS YOU GOING <span>✳</span></div><h2>Find your <em>rhythm.</em></h2></div><p>Easy cycling and walking complement strength work. Start at a pace where you can speak in sentences; incline is always optional.</p></div><div id="cardio-cards" class="cardio-grid"></div><p class="fineprint">Machine resistance levels are specific to your bike and cannot be compared between machines. Use a stable stride; lower the treadmill speed or incline if you need the rails for support.</p></section>
+
+    <section class="guide-section section" id="guide"><div class="shell"><div class="section-heading compact"><div><div class="eyebrow">THE LITTLE THINGS COUNT <span>✳</span></div><h2>Move well.<br><em>Feel your way.</em></h2></div><p>Use these gentle movements after a workout or on a recovery day. Stay in a comfortable range and never force a stretch.</p></div><div id="mobility-list" class="mobility-grid"></div><div class="guide-bottom"><div><span class="micro-label">THE LONG GAME</span><h3>Progress isn’t a straight line.</h3><p>When a movement feels controlled at the top of its range, you can gradually change one thing: a little more resistance, a different variation or a slower lowering phase. Aim to finish most sets feeling you could do about 2–3 more good reps. Heavier resistance may eventually be needed for some strength goals.</p></div><div><span class="micro-label">REST IS PART OF THE PLAN</span><h3>Easy weeks are good weeks.</h3><p>Every fourth week and weeks 13, 26, 39 and 52 are easier or review weeks. Reduce the number of sets to around half, or 1–2 comfortable sets. Week 52 is a gentle review, not a maximum test.</p></div></div></div></section>
+
+    <section class="section shell" id="progress"><div class="section-heading compact"><div><div class="eyebrow">A RECORD OF SHOWING UP <span>✳</span></div><h2>Look how far<br><em>you've come.</em></h2></div><p>Every effort counts. Your progress stays in this browser, on this device—not in an account or on our servers.</p></div><div class="progress-panel"><div id="progress-summary"></div><div class="progress-actions"><button class="button primary" type="button" id="export-json">Download backup <span aria-hidden="true">↓</span></button><label class="button outline file-button">Restore backup <input type="file" id="import-json" accept="application/json,.json"></label><button class="button outline" type="button" id="export-csv">Export CSV</button></div><p class="fineprint">A JSON backup includes your sets, notes and dates. Restoring replaces the current browser data after confirmation. CSV is a readable export, not a restorable backup. Clearing browser data or changing devices can erase your progress; save a backup regularly.</p><p class="fineprint" id="storage-status" role="status"></p></div></section>
+
+    <section class="safety-section section" id="safety"><div class="shell safety-layout"><div><div class="eyebrow">BE KIND TO YOURSELF <span>✳</span></div><h2>A little note<br>on <em>safety.</em></h2><p>There is no test here that can determine whether a workout is medically suitable for you. Adapt, repeat a week or skip a movement whenever you need to.</p></div><div class="safety-details"><details open><summary>Before you start</summary><p>This plan is general information, not individual medical advice. If you are unsure, have an injury, a health condition, or have been inactive for a long time, speak with a GP or accredited exercise physiologist about an appropriate starting point.</p></details><details><summary>When to stop</summary><p>Stop exercising for sharp or persistent pain, chest pain, faintness or unusual breathlessness. Seek appropriate medical help; chest pain, collapse or severe breathlessness can require emergency care.</p></details><details><summary>Set up your space</summary><p>Use a sturdy, non-slip chair or low step and clear floor space. Inspect bands for damage, secure them as instructed, keep them away from your face and do not anchor them to unstable furniture. Use a comfortable range; shoulder pressing is optional.</p></details><details><summary>What about abs?</summary><p>Crunches and planks train different functions, so the plan includes both dynamic and stability work. Ab exercises alone cannot selectively reduce belly fat. Individual results vary.</p></details></div></div></section>
+
+    <section class="support-section shell"><div><div class="eyebrow">A LITTLE SUPPORT GOES A LONG WAY <span>✳</span></div><h2>Good things are<br><em>better together.</em></h2><p>Everyday Strong is free to use. If you find it helpful, you can optionally support this and the creator's other free learning projects.</p><a class="button primary" href="https://buy.stripe.com/8x200i8bSgVe3Vl3g8bfO00" target="_blank" rel="noopener noreferrer">Support via Stripe <span aria-hidden="true">↗</span><span class="sr-only"> (opens Stripe in a new tab)</span></a></div><div class="support-art" aria-hidden="true">♥<span>THANK YOU<br>FOR SHOWING UP</span>✳</div></section>
+  </main>
+
+  <footer class="site-footer"><div class="shell footer-grid"><div><a class="brand light-brand" href="#top"><span class="brand-mark" aria-hidden="true">✳</span><span>everyday<strong>strong</strong><small>HOME FITNESS, MADE HUMAN</small></span></a><p>A kinder way to get stronger at home.<br>One day, one movement, one week at a time.</p></div><div><strong>EXPLORE</strong><a href="#plan">Your plan</a><a href="#guide">Mobility guide</a><a href="#safety">Safety first</a><a href="https://github.com/dmoliveira/everyday-strong">GitHub repository ↗</a></div><div><strong>GOOD TO KNOW</strong><p>Free to use. No account or tracking analytics. Progress is stored locally in your browser.</p><a href="https://www.health.gov.au/topics/physical-activity/24-hour-movement-guidelines-for-all-australians/recommendations-for-adults-18-to-64-years" target="_blank" rel="noopener noreferrer">Australian activity guidelines ↗</a><a href="https://pubmed.ncbi.nlm.nih.gov/41843416/" target="_blank" rel="noopener noreferrer">ACSM resistance-training guidance ↗</a></div></div><div class="shell footer-bottom"><span>MADE FOR REAL LIFE, AND ALL ITS MESSY MIDDLES. ✳</span><a href="#top">BACK TO TOP ↑</a></div></footer>
+  <div id="announcement" class="sr-only" aria-live="polite"></div>
+</body>
+</html>
